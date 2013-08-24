@@ -2,6 +2,7 @@
 var express = require('express');
 var engine = require('ejs-locals');
 var mongoose = require('mongoose');
+var socket = require('socket.io');
 
 // connect to MongoDB
 var db = 'bootcamp';
@@ -162,9 +163,13 @@ app.get('/users/:username', function (req, res) {
 			res.send('No user found by id '+username);
 		}
 		else{
-			Status.find(query, function (err, statuses){
-				res.render('profile.ejs', {user: user, currentUser: currentUser, statuses: statuses});
-			});
+			Status.find(query).sort({time: -1}).execFind(function (err, statuses){
+					res.render('profile.ejs', {
+						user: user, 
+						statuses: statuses, 
+						currentUser: currentUser
+					});	
+				});
 			
 		}
 		
@@ -196,7 +201,7 @@ app.get('/', function (req, res) {
 		res.redirect('/login');
 	}
 	else{
-		
+
 		Status.find({}).sort({time: -1}).execFind(function (err, statuses){
 			res.render('homepage.ejs', {user: req.session.user, statuses: statuses});
 		});
