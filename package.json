@@ -6,7 +6,8 @@
   "dependencies": {
     "express": "*",
     "ejs": "*",
-    "mongoose": "*"
+    "mongoose": "*",
+    "ejs-locals": "~1.0.2"
   },
   "repository": {
     "type": "git",
@@ -14,6 +15,6 @@
   },
   "license": {
     "type": "MIT",
-    "url" : "http://en.wikipedia.org/wiki/MIT_License"
+    "url": "http://en.wikipedia.org/wiki/MIT_License"
   }
 }
