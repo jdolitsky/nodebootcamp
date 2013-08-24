@@ -1,5 +1,23 @@
 <% layout('layout') -%>
-
+<% block('topbar', 
+	'<div id="rightside">\
+		<a id="user" href="/users/'+currentUser.username+'">\
+			<img id="userpic" src="'+currentUser.image+'"/>\
+			<span id="username">'+currentUser.username+'</span>\
+		</a>\
+		<a href="/logout" id="logout">Logout</a>\
+	</div>'
+) -%>
+<script>
+var myname = "<%= currentUser.username %>";
+</script>
+<%
+if (user.username == currentUser.username) { 
+	var isMe = true;
+} else {
+	var isMe = false;
+}
+%>
 <aside class="centerme">
 	<h1 id="theusername"><%= user.username %></h1>
 	<img id="profPic" src="<%= user.image %>"><br>

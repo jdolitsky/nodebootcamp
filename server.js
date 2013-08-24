@@ -79,6 +79,17 @@ app.post('/signup', function (req, res) {
 	
 });
 
+app.get('/logout', function (req, res) {
+
+	if (req.session.user) {
+		console.log(req.session.user.username+' has logged out');
+		delete req.session.user;
+	}
+
+	res.redirect('/');
+
+});
+
 app.post('/login', function (req, res) {
 	var username = req.body.username.toLowerCase();
 	var password = req.body.password;
@@ -89,7 +100,9 @@ app.post('/login', function (req, res) {
 			res.send('No user found by id '+username);
 		}
 		else{
-			res.render('profile.ejs', {user: user});
+			req.session.user = user;
+			var currentUser =  req.session.user;
+			res.render('profile.ejs', {user: user, currentUser: currentUser});
 		}
 		
 	});
@@ -98,13 +111,15 @@ app.post('/login', function (req, res) {
 app.get('/users/:username', function (req, res) {
 	var username = req.params.username.toLowerCase();
 	var query = {username: username};
+	var currentUser = req.session.user;
+
 	User.findOne(query, function (err, user) {
 		console.log(user);
 		if (err || !user) {
 			res.send('No user found by id '+username);
 		}
 		else{
-			res.render('profile.ejs', {user: user});
+			res.render('profile.ejs', {user: user, currentUser: currentUser});
 		}
 		
 	});
@@ -131,9 +146,12 @@ app.get('/updateuser', function (req, res){
 
 // root route (response for http://localhost:3000/)
 app.get('/', function (req, res) {
-
-	var obj = {name: "Josh", city: "LA"};
-	res.render('profile.ejs', {user: obj, date: "Aug 24"});
+	if(!req.session.user){
+		res.redirect('/login');
+	}
+	else{
+		res.render('homepage.ejs', {user: req.session.user});
+	}
 
 });
 
