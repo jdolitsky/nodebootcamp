@@ -196,7 +196,10 @@ app.get('/', function (req, res) {
 		res.redirect('/login');
 	}
 	else{
-		res.render('homepage.ejs', {user: req.session.user});
+		
+		Status.find({}).sort({time: -1}).execFind(function (err, statuses){
+			res.render('homepage.ejs', {user: req.session.user, statuses: statuses});
+		});
 	}
 
 });
