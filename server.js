@@ -36,6 +36,10 @@ var User = mongoose.model('User', {
 app.listen(port);
 console.log('Express server listening on port '+port);
 
+app.get('/login', function (req, res) {
+	res.render('login.ejs');
+});
+
 app.get('/newuser/:username', function (req, res) {
 	var username = req.params.username;
 	var newUser = new User({
@@ -49,6 +53,21 @@ app.get('/newuser/:username', function (req, res) {
 		res.send('welcome '+username);
 	});
 	
+});
+
+app.get('/users/:username', function (req, res) {
+	var username = req.params.username.toLowerCase();
+	var query = {username: username};
+	User.findOne(query, function (err, user) {
+		console.log(user);
+		if (err || !user) {
+			res.send('No user found by id '+username);
+		}
+		else{
+			res.render('profile.ejs', {user: user});
+		}
+		
+	});
 });
 
 app.get('/allusers',function (req, res){

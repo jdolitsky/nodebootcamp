@@ -1,0 +1,21 @@
+<% layout('layout') -%>
+<% block('topbar', '<a href="/login" id="login">Login</a>') -%>
+
+<article class="centerme">
+	<h1 class="no-margin-top">Login</h1>
+	<form action="/login" method="POST">
+		<input type="text" name="username" placeholder="username"/><br>
+	    <input type="password" name="password" placeholder="password"/><br>
+	    <input type="submit" value="Login"/>
+    </form>
+</article>
+
+<aside class="centerme">
+    <h3>Not a member? Sign up!</h3>
+    <form method="post" action="/signup">
+	    <input type="text" name="username" placeholder="username"/><br>
+	    <input type="password" name="password" placeholder="password"/><br>
+	    <input type="password" name="confirm" placeholder="confirm"/><br>
+    	<button type="sumbit"> Sign Up! </button>
+    </form>
+</aside>
