@@ -109,6 +109,22 @@ app.post('/login', function (req, res) {
 	});
 });
 
+app.post('/profile', function (req, res) {
+
+	if(req.session.user){
+		var username = req.session.user.username;
+		var image = req.body.image;
+		var bio = req.body.bio;
+		var query = {username: username};
+		var change = {bio: bio, image: image};
+
+		User.update(query, change, function (err, user){
+			res.redirect('/users/'+username);
+		});
+	}
+
+});
+
 app.get('/users/:username', function (req, res) {
 	var username = req.params.username.toLowerCase();
 	var query = {username: username};

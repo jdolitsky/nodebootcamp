@@ -18,8 +18,19 @@ if (user.username == currentUser.username) {
 	var isMe = false;
 }
 %>
+
 <aside class="centerme">
 	<h1 id="theusername"><%= user.username %></h1>
 	<img id="profPic" src="<%= user.image %>"><br>
-	<h2><%= user.bio %></h2>
+	<% if (isMe) { %> 
+    <form method="POST" action="/profile">
+    	Image<br>
+		<input name="image" type="text" id="image" value="<%= user.image %>"/><br>
+		Bio<br>
+		<textarea id="bio" name="bio"><%= user.bio %></textarea><br><br>
+		<input class="sub" type="submit" value="Update">
+	</form>
+	<% } else { %>
+		<%= user.bio %>
+	<% } %>
 </aside>
