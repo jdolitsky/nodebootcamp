@@ -1,6 +1,12 @@
 // required modules
 var express = require('express');
 var engine = require('ejs-locals');
+var mongoose = require('mongoose');
+
+
+// connect to MongoDB
+var db = 'bootcamp';
+mongoose.connect('mongodb://localhost/'+db);
 
 
 // initialize our app
