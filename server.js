@@ -28,8 +28,7 @@ var User = mongoose.model('User', {
 	username: String,
 	password: String,
 	image: String,
-	bio: String,
-	friends: Array
+	bio: String
 });
 
 // start listening...
@@ -40,19 +39,58 @@ app.get('/login', function (req, res) {
 	res.render('login.ejs');
 });
 
-app.get('/newuser/:username', function (req, res) {
-	var username = req.params.username;
-	var newUser = new User({
+app.post('/signup', function (req, res) {
+	var username = req.body.username.toLowerCase();
+	var password = req.body.password;
+	var confirm = req.body.confirm;
+	var query = {username: username};
+
+	User.findOne(query, function (err, user) {
+		if(err){
+			res.send('Error:'+err);
+		}
+		if (user) {
+			res.send('Username'+username+'already taken!');
+		} else {
+			var userData = { 
+				username: username,
+				password: password,
+				image: 'http://leadersinheels.com/wp-content/uploads/facebook-default.jpg', //default image
+				bio: 'Im new to NodeBook!'
+			};
+			var newUser = new User(userData).save(function (err){
+				console.log('New user '+username+' has been created!');
+				res.redirect('/users/'+username);
+
+			});
+			}
+		});
+	/*var newUser = new User({
 		username: username,
-		password: "thisismypass",
-		bio: "Just a regular guy",
-		image: "https://0.gravatar.com/avatar/79943d1a567466f80e313d18728ea205?d=https%3A%2F%2Fidenticons.github.com%2F42a78e833c8827c576df9398f411616f.png",
-		friends: []
+		password: password,
+		bio: "Enter profile here",
+		image: "https://0.gravatar.com/avatar/79943d1a567466f80e313d18728ea205?d=https%3A%2F%2Fidenticons.github.com%2F42a78e833c8827c576df9398f411616f.png"
 	}).save(function (err){
 		console.log('New user '+username+' created!');
-		res.send('welcome '+username);
-	});
+		res.redirect('/users/'+username);
+	});*/
 	
+});
+
+app.post('/login', function (req, res) {
+	var username = req.body.username.toLowerCase();
+	var password = req.body.password;
+	var query = {username: username, password: password};
+	User.findOne(query, function (err, user) {
+		console.log(user);
+		if (err || !user) {
+			res.send('No user found by id '+username);
+		}
+		else{
+			res.render('profile.ejs', {user: user});
+		}
+		
+	});
 });
 
 app.get('/users/:username', function (req, res) {
