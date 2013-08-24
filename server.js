@@ -124,6 +124,33 @@ app.post('/profile', function (req, res) {
 
 });
 
+app.post('/statuses', function (req, res){
+	if(req.session.user){
+		var username = req.session.user.username;
+		var pic = req.session.user.image;
+		var status = req.body.status;
+
+		var statusData = { 
+			body: status,
+			time: new Date().getTime(),
+			username: username,
+			image: pic,
+			comments: [],
+			likes: []
+		};
+
+		var newStatus = new Status(statusData).save(function (err){
+			res.redirect('/users/'+username);
+		});
+
+	}
+
+});
+
+
+
+
+
 app.get('/users/:username', function (req, res) {
 	var username = req.params.username.toLowerCase();
 	var query = {username: username};
@@ -135,7 +162,10 @@ app.get('/users/:username', function (req, res) {
 			res.send('No user found by id '+username);
 		}
 		else{
-			res.render('profile.ejs', {user: user, currentUser: currentUser, statuses: []});
+			Status.find(query, function (err, statuses){
+				res.render('profile.ejs', {user: user, currentUser: currentUser, statuses: statuses});
+			});
+			
 		}
 		
 	});
