@@ -61,6 +61,7 @@ app.post('/signup', function (req, res) {
 				bio: 'Im new to NodeBook!'
 			};
 			var newUser = new User(userData).save(function (err){
+				req.session.user = userData;
 				console.log('New user '+username+' has been created!');
 				res.redirect('/users/'+username);
 
