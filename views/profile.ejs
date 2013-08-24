@@ -34,3 +34,32 @@ if (user.username == currentUser.username) {
 		<%= user.bio %>
 	<% } %>
 </aside>
+
+<article class="centerme">
+	<div id="postsOuter">
+	<% 
+	if (isMe) { %>
+		<form action="/statuses"  id="postNewStatus" method="POST">
+			<textarea id="newstatus" name="status" placeholder="What's your status?"></textarea>
+			<input class="sub" type="submit" value="Post"/>
+		</form>
+	<% 
+	}
+
+	for (var i=0;i<statuses.length;i++) { %>
+		<div class="post">
+			<div class="timestamp"><abbr class="timeago" title="<%= new Date(statuses[i].time).toISOString() %>"></abbr></div>
+			<a class="colorize" href="/users/<%= user.username %>">
+				<div class="smallpic">
+					<img class="smallpic_img" src="<%= user.image %>">
+				</div>	
+				<div class="smallname"><%= user.username %></div>
+			</a>
+			<br>
+			<div class="statusbody"><%= statuses[i].body %></div>
+		</div>
+	<% } %>
+
+	</div>
+
+</article>

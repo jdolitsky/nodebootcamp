@@ -33,6 +33,16 @@ var User = mongoose.model('User', {
 	bio: String
 });
 
+// create status model
+var Status = mongoose.model('Status', {
+	body: String,
+	time: Number,
+	username: String,
+	image: String,
+	comments: Array,
+	likes: Array
+});
+
 // start listening...
 app.listen(port);
 console.log('Express server listening on port '+port);
@@ -64,19 +74,9 @@ app.post('/signup', function (req, res) {
 				req.session.user = userData;
 				console.log('New user '+username+' has been created!');
 				res.redirect('/users/'+username);
-
 			});
-			}
-		});
-	/*var newUser = new User({
-		username: username,
-		password: password,
-		bio: "Enter profile here",
-		image: "https://0.gravatar.com/avatar/79943d1a567466f80e313d18728ea205?d=https%3A%2F%2Fidenticons.github.com%2F42a78e833c8827c576df9398f411616f.png"
-	}).save(function (err){
-		console.log('New user '+username+' created!');
-		res.redirect('/users/'+username);
-	});*/
+		}
+	});
 	
 });
 
@@ -102,8 +102,7 @@ app.post('/login', function (req, res) {
 		}
 		else{
 			req.session.user = user;
-			var currentUser =  req.session.user;
-			res.render('profile.ejs', {user: user, currentUser: currentUser});
+			res.redirect('/users/'+username);
 		}
 		
 	});
@@ -136,7 +135,7 @@ app.get('/users/:username', function (req, res) {
 			res.send('No user found by id '+username);
 		}
 		else{
-			res.render('profile.ejs', {user: user, currentUser: currentUser});
+			res.render('profile.ejs', {user: user, currentUser: currentUser, statuses: []});
 		}
 		
 	});
