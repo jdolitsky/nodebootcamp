@@ -19,6 +19,8 @@ app.set('views', __dirname+'/views');
 app.use(express.static(__dirname+'/public'));
 app.use(express.logger('dev'));
 app.use(express.bodyParser());
+app.use(express.cookieParser());
+app.use(express.session({secret: 'coloft'}));
 
 // port that server will listen on
 var port = 3000;
