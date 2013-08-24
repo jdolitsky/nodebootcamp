@@ -25,6 +25,9 @@
 				</a>
 				<br>
 				<div class="statusbody"><%= statuses[i].body %></div>
+				<form method="POST" action="/statuses/<%= statuses[i]._id %>">
+				<input type="submit" value="<%= statuses[i].likes.length %>"/>
+			</form>
 			</div>
 		<% } %>
 	<% } else { %>

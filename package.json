@@ -7,7 +7,8 @@
     "express": "*",
     "ejs": "*",
     "mongoose": "*",
-    "ejs-locals": "~1.0.2"
+    "ejs-locals": "~1.0.2",
+    "socket.io": "~0.9.16"
   },
   "repository": {
     "type": "git",

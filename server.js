@@ -2,7 +2,7 @@
 var express = require('express');
 var engine = require('ejs-locals');
 var mongoose = require('mongoose');
-var socket = require('socket.io');
+var http = require('http');
 
 // connect to MongoDB
 var db = 'bootcamp';
@@ -45,7 +45,10 @@ var Status = mongoose.model('Status', {
 });
 
 // start listening...
-app.listen(port);
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
+server.listen(port);
+
 console.log('Express server listening on port '+port);
 
 app.get('/login', function (req, res) {
@@ -79,6 +82,18 @@ app.post('/signup', function (req, res) {
 		}
 	});
 	
+});
+
+app.post('/statuses/:id', function (req,res){
+	var id = req.params.id;
+
+	var myUsername = req.session.user.username;
+
+	Status.update({_id: id}, {$pull: {likes: myUsername}}, 
+		function (err, status) {
+		res.redirect('/');
+	});
+
 });
 
 app.get('/logout', function (req, res) {
@@ -141,6 +156,7 @@ app.post('/statuses', function (req, res){
 		};
 
 		var newStatus = new Status(statusData).save(function (err){
+			io.sockets.emit('newStatus', {statusData: statusData});
 			res.redirect('/users/'+username);
 		});
 
