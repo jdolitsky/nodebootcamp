@@ -84,12 +84,13 @@ app.post('/signup', function (req, res) {
 	
 });
 
+// like a specific status
 app.post('/statuses/:id', function (req,res){
 	var id = req.params.id;
 
 	var myUsername = req.session.user.username;
 
-	Status.update({_id: id}, {$pull: {likes: myUsername}}, 
+	Status.update({_id: id}, {$push: {likes: myUsername}}, 
 		function (err, status) {
 		res.redirect('/');
 	});
